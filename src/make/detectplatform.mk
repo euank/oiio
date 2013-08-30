@@ -18,17 +18,12 @@
 platform ?= unknown
 
 # Use 'uname -m' to determine the hardware architecture.  This should
-# return "x86" or "x86_64"
+# return "x86" or "x86_64" or any of many arms (eg "armv7l")
 hw := ${shell uname -m}
 #$(info hardware = ${hw})
-ifneq (${hw},x86)
-  ifneq (${hw},x86_64)
-    ifneq (${hw},i386)
-      ifneq (${hw},i686)
-        $(error "ERROR: Unknown hardware architecture")
-      endif
-    endif
-  endif
+SUPPORTED_ARCHITECTURES= x86 x86_64 i386 i686 armv7l
+ifeq ($(filter ${hw},$(SUPPORTED_ARCHITECTURES)),)
+  $(error "ERROR: Unknown hardware architecture")
 endif
 
 # Use 'uname', lowercased and stripped of pesky stuff, and the hardware
